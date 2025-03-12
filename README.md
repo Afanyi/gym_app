@@ -91,7 +91,7 @@ Trainingsdaten werden in localStorage gespeichert, um über Sitzungen hinweg erh
 - Dauer in Stunden zu Dummy-Daten hinzugefügt *(Joshua Schmidt)*
 - Fehlerbehebungen an zusammengeführtem Code *(Joshua Schmidt)*
 - Behebung von Merge-Konflikten *(Joshua Schmidt)*
-- Speicherung von `mockDataGenerator` gefixt *(Joshua Schmidt)*
+- Speicherung von `mockDataGenerator` gefixt *(Blasius Fornge Afanyi)*
 - Aktualisierung der Routinen-Seite mit Favoriten *(Blasius Fornge Afanyi)*
 - Refactoring des Statistik-Moduls und Implementierung der Entscheidungsunterstützung *(Dogukan Tanir)*
 
@@ -101,7 +101,7 @@ Trainingsdaten werden in localStorage gespeichert, um über Sitzungen hinweg erh
 - **Responsible:** Multiple Contributors
 
 #### Changes:
-- Speicherung von `mockDataGenerator` und Hinzufügen eines Datums zu Workouts *(Joshua Schmidt)*
+- Speicherung von `mockDataGenerator` und Hinzufügen eines Datums zu Workouts *(Blasius Fornge Afanyi)*
 - Fertigstellung der Statistik-Bindung *(Auriand Dester Ngouateu Kemma)*
 - Erstellung einer Einstellungsseite *(Auriand Dester Ngouateu Kemma)*
 - Berechnung des durchschnittlichen Gewichts und Einführung einer persönlichen Vorstellung *(Dogukan Tanir)*
@@ -194,7 +194,7 @@ Trainingsdaten werden in localStorage gespeichert, um über Sitzungen hinweg erh
     - Commit: `9e5be2d0`
 
 ### **Januar 28, 2025**
-- **[Joshua Schmidt]**
+- **[Blasius Fornge Afanyi]**
     - Speicherung von `mockDataGenerator`
     - Hinzufügen eines Datums zu Workouts
     - Commit: `614b0fd6`
