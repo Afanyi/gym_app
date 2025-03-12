@@ -18,10 +18,14 @@
     "@mui/x-date-pickers": "^7.23.6",
     "@mui/x-tree-view": "^7.23.6",
     "dayjs": "^1.11.13",
+    "material-ui-vite": "file:",
     "react": "latest",
+    "react-confetti": "^6.2.2",
+    "react-confetti-boom": "^1.1.2",
     "react-dom": "latest",
     "react-heatmap-grid": "^0.9.1",
-    "react-router-dom": "^7.1.1"
+    "react-router-dom": "^7.1.1",
+    "react-use": "^17.6.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "latest",

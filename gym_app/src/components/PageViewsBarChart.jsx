@@ -1,11 +1,41 @@
-import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Chip from '@mui/material/Chip';
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import { BarChart } from '@mui/x-charts/BarChart';
 import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import { BarChart } from '@mui/x-charts/BarChart';
+import * as React from 'react';
+// import { exercises } from '../exercises';
+// import { useTrainingData } from '../TrainingDataContext';
+
+// function searchExerciseGroup(exercise) {
+//   for (const category in exercises) {
+//     if (exercises[category].includes(exercise)) {
+//       return category;
+//     }
+//   }
+// }
+
+function aggregateFrequencyByMuscle(trainingData) {
+  const frequenciesByMuscle = {
+    beine: 0,
+    arme: 0,
+    rücken: 0,
+    brust: 0,
+    bauch: 0,
+    schultern: 0,
+  };
+
+  trainingData.forEach((entry) => {
+    entry.exercises.forEach((exercise) => {
+      const category = exercise.muscleGroup;     
+      frequenciesByMuscle[category] += 1;
+    });
+    
+  });
+
+  return frequenciesByMuscle;
+}
 
 export default function PageViewsBarChart() {
   const theme = useTheme();
@@ -14,6 +44,11 @@ export default function PageViewsBarChart() {
     (theme.vars || theme).palette.primary.main,
     (theme.vars || theme).palette.primary.light,
   ];
+
+  // const { trainingData } = useTrainingData();
+  const completedWorkouts = JSON.parse(localStorage.getItem("completedWorkouts")) || [];
+  const frequenciesByMuscle = aggregateFrequencyByMuscle(completedWorkouts);
+  
 
   return (
     <Card variant="outlined" sx={{ width: '100%' }}>
@@ -49,21 +84,16 @@ export default function PageViewsBarChart() {
           ]}
           series={[
             {
-              id: 'page-views',
-              label: 'Page views',
-              data: [2234, 3872, 2998, 4125, 3357, 2789, 2998],
-              stack: 'A',
-            },
-            {
-              id: 'downloads',
-              label: 'Downloads',
-              data: [3098, 4215, 2384, 2101, 4752, 3593, 2384],
-              stack: 'A',
-            },
-            {
-              id: 'conversions',
-              label: 'Conversions',
-              data: [4051, 2275, 3129, 4693, 3904, 2038, 2275],
+              id: 'frequency',
+              label: 'Häufigkeit',
+              data: [
+                frequenciesByMuscle.beine,
+                frequenciesByMuscle.arme,
+                frequenciesByMuscle.rücken,
+                frequenciesByMuscle.brust,
+                frequenciesByMuscle.bauch,
+                frequenciesByMuscle.schultern,
+              ],
               stack: 'A',
             },
           ]}

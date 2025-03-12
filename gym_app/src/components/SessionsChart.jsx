@@ -1,12 +1,10 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Chip from '@mui/material/Chip';
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import { LineChart } from '@mui/x-charts/LineChart';
+import PropTypes from 'prop-types';
 
 function AreaGradient({ color, id }) {
   return (
@@ -24,24 +22,77 @@ AreaGradient.propTypes = {
   id: PropTypes.string.isRequired,
 };
 
-function getDaysInMonth(month, year) {
-  const date = new Date(year, month, 0);
-  const monthName = date.toLocaleDateString('en-US', {
-    month: 'short',
+// function getDaysInMonth(month, year) {
+//   const date = new Date(year, month, 0);
+//   const monthName = date.toLocaleDateString('en-US', {
+//     month: 'short',
+//   });
+//   const daysInMonth = date.getDate();
+//   const days = [];
+//   let i = 1;
+//   while (days.length < daysInMonth) {
+//     days.push(`${monthName} ${i}`);
+//     i += 1;
+//   }
+//   return days;
+// }
+
+const calculatePower = (weight, reps, duration) => {
+  const work = weight * reps; // approx. work
+  //const timeInSeconds = parseInt(duration.slice(0, -1)); // Convert duration to seconds
+  return work / (duration * 60); // Power
+};
+
+const aggregatePowerByDate = (trainingData) => {
+  const powerByDate = {};
+
+  // Aktuelles Datum und Datum von vor 30 Tagen berechnen
+  const today = new Date();
+  const startDate = new Date();
+  startDate.setDate(today.getDate() - 60); // 30 Tage zurück
+
+  trainingData.forEach((entry) => {
+    const entryDate = new Date(entry.date); // Datum des Trainings
+    if (entryDate >= startDate && entryDate <= today) {
+      const date = entry.date.slice(5, 10); // MM-DD extrahieren
+
+      entry.exercises.forEach((exercise) => {
+        exercise.rows.forEach((row) => {
+          const power = calculatePower(row.weight, row.reps, 1, entry.duration);
+          if (!powerByDate[date]) {
+            powerByDate[date] = { totalPower: 0, count: 0 };
+          }
+          powerByDate[date].totalPower += power;
+          powerByDate[date].count += 1;
+        });
+      });
+    }
   });
-  const daysInMonth = date.getDate();
-  const days = [];
-  let i = 1;
-  while (days.length < daysInMonth) {
-    days.push(`${monthName} ${i}`);
-    i += 1;
-  }
-  return days;
-}
+
+  // Daten aggregieren
+  const aggregatedData = Object.keys(powerByDate).map((date) => ({
+    datum: date,
+    averagePower: powerByDate[date].totalPower / powerByDate[date].count,
+  }));
+
+  return aggregatedData;
+};
+
 
 export default function SessionsChart() {
   const theme = useTheme();
-  const data = getDaysInMonth(4, 2024);
+  // const { trainingData } = useTrainingData();
+  // const aggregatedData = aggregatePowerByDate(trainingData);
+  const completedWorkouts = JSON.parse(localStorage.getItem("completedWorkouts")) || [];
+  const aggregatedData = aggregatePowerByDate(completedWorkouts);
+
+  const data = [];
+  const y_data = [];
+  {aggregatedData.map((entry) => (
+    data.push(entry.datum),
+    y_data.push(entry.averagePower)
+  ))}
+  //const data = getDaysInMonth(4, 2024);
 
   const colorPalette = [
     theme.palette.primary.main
@@ -75,23 +126,25 @@ export default function SessionsChart() {
             {
               scaleType: 'point',
               data,
-              tickInterval: (index, i) => (i + 1) % 5 === 0,
+              tickSize: 0,
+              //tickInterval: (index, i) => (i + 1) % 1 === 0,
+              //valueFormatter: () => '',
             },
           ]}
           series={[
             {
               id: 'direct',
-              label: 'Direct',
+              label: 'Leistung',
               showMark: false,
               curve: 'linear',
               stack: 'total',
               area: true,
               stackOrder: 'ascending',
-              data: [
-                300, 900, 600, 1200, 1500, 1800, 2400, 2100, 2700, 3000, 1800, 3300,
-                3600, 3900, 4200, 4500, 3900, 4800, 5100, 5400, 4800, 5700, 6000,
-                6300, 6600, 6900, 7200, 7500, 7800, 8100,
-              ],
+              data: y_data //[
+              //   300, 900, 600, 1200, 1500, 1800, 2400, 2100, 2700, 3000, 1800, 3300,
+              //   3600, 3900, 4200, 4500, 3900, 4800, 5100, 5400, 4800, 5700, 6000,
+              //   6300, 6600, 6900, 7200, 7500, 7800, 8100,
+              // ],
             },
           ]}
           height={250}
